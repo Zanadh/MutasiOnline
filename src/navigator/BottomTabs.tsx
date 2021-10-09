@@ -7,9 +7,7 @@ import SettingScreen from "@screens/SettingScreen";
 import InfoScreen from "@screens/NotificationScreen";
 import HomeScreen from "@screens/HomeScreen";
 import ProgressListScreen from "@screens/ProgressListScreen";
-
-import type { IconType } from "../components/Icon";
-import { Icon } from "../components/Icon";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export type TabParamList = {
   Home: undefined;
@@ -54,7 +52,7 @@ const SettingNavigator = () => {
 };
 
 const customTabOptions: BottomTabNavigationOptions = {
-  tabBarLabelStyle: { fontSize: 11, marginVertical: 4 },
+  tabBarLabelStyle: { marginBottom: 4 },
   headerShown: false,
 };
 
@@ -65,23 +63,23 @@ const BottomTabs = () => {
     const { route } = props;
 
     const customTabBarIcon = ({ color }: { color: string }) => {
-      let iconName: IconType;
+      let iconName = "";
       switch (route.name) {
         case "Home":
           iconName = "home";
           break;
         case "Progress":
-          iconName = "progress";
+          iconName = "list";
           break;
         case "Info":
           iconName = "bell";
           break;
         default:
-          iconName = "setting";
+          iconName = "cog";
           break;
       }
 
-      return <Icon name={iconName} color={color} />;
+      return <Icon name={iconName} size={20} color={color} />;
     };
 
     return { ...customTabOptions, tabBarIcon: customTabBarIcon };
