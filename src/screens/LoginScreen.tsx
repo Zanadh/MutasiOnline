@@ -12,7 +12,11 @@ const LoginScreen = () => {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>Login Screen</Text>
-      <Button title="BACK" onPress={() => navigation.navigate("HomeTab")} />
+      <Button title="MASUK" onPress={() => navigation.navigate("HomeTab")} />
+      <Button
+        title="Belum terdaftar? Daftar di sini"
+        onPress={() => navigation.navigate("Register")}
+      />
     </View>
   );
 };
