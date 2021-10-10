@@ -7,15 +7,17 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import LandingScreen from "../screens/LandingScreen";
 import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 
 export type AuthStackParamList = {
   Login: undefined;
+  Register: undefined;
   Landing: undefined;
   HomeTab: undefined;
 };
 
 export interface AuthStackInterface {
-  screen: "Landing";
+  screen: "Landing" | "Login" | "Register";
 }
 
 const AuthStackNavigator = createStackNavigator();
@@ -43,6 +45,11 @@ const AuthStack = () => {
       <AuthStackNavigator.Screen
         name="Login"
         component={LoginScreen}
+        options={({ navigation }) => AuthStackOption({ navigation })}
+      />
+      <AuthStackNavigator.Screen
+        name="Register"
+        component={RegisterScreen}
         options={({ navigation }) => AuthStackOption({ navigation })}
       />
     </AuthStackNavigator.Navigator>
