@@ -24,11 +24,20 @@ const Paginator = ({
           outputRange: [10, 20, 10],
           extrapolate: "clamp",
         });
-        console.log({ scrollX, dotWidth });
+
+        const bgColor = scrollX.interpolate({
+          inputRange,
+          outputRange: [
+            "rgb(180, 180, 180)",
+            "rgb(120, 120, 120)",
+            "rgb(180, 180, 180)",
+          ],
+          extrapolate: "clamp",
+        });
 
         return (
           <Animated.View
-            style={[styles.dot, { width: dotWidth }]}
+            style={[styles.dot, { width: dotWidth, backgroundColor: bgColor }]}
             key={i.toString()}
           />
         );
@@ -44,7 +53,7 @@ const styles = StyleSheet.create({
     height: 10,
     width: 10,
     borderRadius: 5,
-    backgroundColor: "purple",
+    backgroundColor: "grey",
     marginHorizontal: 5,
   },
 });

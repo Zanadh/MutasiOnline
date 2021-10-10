@@ -5,11 +5,8 @@ export enum ColorBaseEnum {
 }
 
 export enum ColorPrimaryEnum {
-  cream = "#FCF0DE",
-  magenta = "rgb(226,33,83)",
-  green = "rgb(0,101,81)",
-  yellow = "rgb(252,173,16)",
-  gray = "#F8F7F5 ",
+  primary = "#1318ad",
+  secondary = "#295ee3",
 }
 
 export enum ColorBaseGrayEnum {
