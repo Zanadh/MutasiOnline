@@ -54,6 +54,11 @@ const SettingNavigator = () => {
 const customTabOptions: BottomTabNavigationOptions = {
   tabBarLabelStyle: { marginBottom: 4 },
   headerShown: false,
+  tabBarStyle: {
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    paddingTop: 5,
+  },
 };
 
 const BottomTabs = () => {

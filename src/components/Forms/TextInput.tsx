@@ -33,7 +33,7 @@ const TextInput = (props: TextInputPropsInterface) => {
       <RNTextInput
         ref={textRef}
         {...props}
-        style={{ height: 40, flex: 1 }}
+        style={{ height: 45, flex: 1 }}
         onFocus={() => {
           setIsFocus(true);
         }}
