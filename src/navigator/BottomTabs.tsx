@@ -1,8 +1,8 @@
 import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import type { ComponentType } from "react";
 import React from "react";
-import type { ParamListBase, RouteProp } from "@react-navigation/native";
 import SettingScreen from "@screens/SettingScreen";
 import InfoScreen from "@screens/NotificationScreen";
 import HomeScreen from "@screens/HomeScreen";
@@ -13,7 +13,7 @@ export type TabParamList = {
   Home: undefined;
   Progress: undefined;
   Info: undefined;
-  Setting: undefined;
+  Settings: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -35,7 +35,7 @@ const ProgressListNavigator = () => {
   );
 };
 
-const NotificationNavigator = () => {
+const InfoNavigator = () => {
   return (
     <BottomTabsStack.Navigator screenOptions={{ headerShown: false }}>
       <BottomTabsStack.Screen name="Info" component={InfoScreen} />
@@ -43,10 +43,10 @@ const NotificationNavigator = () => {
   );
 };
 
-const SettingNavigator = () => {
+const SettingsNavigator = () => {
   return (
     <BottomTabsStack.Navigator screenOptions={{ headerShown: false }}>
-      <BottomTabsStack.Screen name="Setting" component={SettingScreen} />
+      <BottomTabsStack.Screen name="Settings" component={SettingScreen} />
     </BottomTabsStack.Navigator>
   );
 };
@@ -55,69 +55,40 @@ const customTabOptions: BottomTabNavigationOptions = {
   tabBarLabelStyle: { marginBottom: 4 },
   headerShown: false,
   tabBarStyle: {
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    paddingTop: 5,
+    position: "absolute",
+    borderRadius: 15,
+    marginHorizontal: 10,
+    bottom: 10,
   },
 };
 
-const BottomTabs = () => {
-  const customScreenOptions = (props: {
-    route: RouteProp<ParamListBase, string>;
-  }): BottomTabNavigationOptions => {
-    const { route } = props;
+const tabItem: Array<{
+  name: keyof TabParamList;
+  iconName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: ComponentType<any>;
+}> = [
+  { name: "Home", iconName: "home", component: HomeNavigator },
+  { name: "Progress", iconName: "tasks", component: ProgressListNavigator },
+  { name: "Info", iconName: "bell", component: InfoNavigator },
+  { name: "Settings", iconName: "cog", component: SettingsNavigator },
+];
 
-    const customTabBarIcon = ({ color }: { color: string }) => {
-      let iconName = "";
-      switch (route.name) {
-        case "Home":
-          iconName = "home";
-          break;
-        case "Progress":
-          iconName = "list";
-          break;
-        case "Info":
-          iconName = "bell";
-          break;
-        default:
-          iconName = "cog";
-          break;
-      }
-
-      return <Icon name={iconName} size={20} color={color} />;
-    };
-
-    return { ...customTabOptions, tabBarIcon: customTabBarIcon };
-  };
-
-  return (
-    <>
-      <Tab.Navigator
-        initialRouteName="Home"
-        screenOptions={customScreenOptions}>
-        <Tab.Screen
-          name="Home"
-          component={HomeNavigator}
-          options={{ tabBarLabel: "Home" }}
-        />
-        <Tab.Screen
-          name="Progress"
-          component={ProgressListNavigator}
-          options={{ tabBarLabel: "Progress" }}
-        />
-        <Tab.Screen
-          name="Info"
-          component={NotificationNavigator}
-          options={{ tabBarLabel: "Info" }}
-        />
-        <Tab.Screen
-          name="Setting"
-          component={SettingNavigator}
-          options={{ tabBarLabel: "Settings" }}
-        />
-      </Tab.Navigator>
-    </>
-  );
-};
+const BottomTabs = () => (
+  <Tab.Navigator initialRouteName="Home" screenOptions={customTabOptions}>
+    {tabItem.map((tab, i) => (
+      <Tab.Screen
+        {...tab}
+        options={{
+          tabBarLabel: tab.name,
+          tabBarIcon: ({ color }) => (
+            <Icon name={tab.iconName} size={20} color={color} />
+          ),
+        }}
+        key={i}
+      />
+    ))}
+  </Tab.Navigator>
+);
 
 export default BottomTabs;

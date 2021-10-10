@@ -11,8 +11,8 @@ function HeaderBackground() {
         {
           backgroundColor: ColorPrimaryEnum.secondary,
           height: 150,
-          borderBottomLeftRadius: 40,
-          borderBottomRightRadius: 40,
+          borderBottomLeftRadius: 35,
+          borderBottomRightRadius: 35,
           overflow: "hidden",
         },
       ]}>
