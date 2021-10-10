@@ -6,7 +6,7 @@
     "start": "react-native start",
     "start:clear": "watchman watch-del-all && yarn start --reset-cache",
     "android": "react-native run-android",
-    "android:clean": "cd android && ./gradlew clean && cd -",
+    "android:clean": "cd android && ./gradlew clean && cd ..",
     "ios": "react-native run-ios",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -32,6 +32,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/runtime": "^7.12.5",
+    "@bam.tech/react-native-make": "^3.0.3",
     "@react-native-community/eslint-config": "^2.0.0",
     "@types/jest": "^26.0.23",
     "@types/react-native": "^0.65.0",
