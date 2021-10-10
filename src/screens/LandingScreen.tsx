@@ -71,7 +71,12 @@ const Slide = ({ title, subTitle, imgSource, btnText }: slideInterface) => {
     <View
       style={[
         styles.imageBg,
-        { padding: 24, display: "flex", justifyContent: "space-between" },
+        {
+          padding: 24,
+          paddingBottom: 0,
+          display: "flex",
+          justifyContent: "space-between",
+        },
       ]}>
       <View style={{ alignItems: "center", marginTop: "30%" }}>
         <Image
@@ -158,6 +163,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: ColorBaseEnum.black,
     fontWeight: "bold",
+    textAlign: "center",
   },
   subTitleText: {
     fontSize: 14,
