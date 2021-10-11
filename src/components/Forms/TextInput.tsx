@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { StyleSheet, View, TextInput as RNTextInput } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-import { ColorBaseEnum } from "../../styles/Colors";
+import { ColorBaseEnum, ColorBaseGrayEnum } from "../../styles/Colors";
 
 import type { TextInputPropsInterface } from "./TextInput.type";
 
@@ -25,7 +25,7 @@ const TextInput = (props: TextInputPropsInterface) => {
           <Icon
             name={props.prefixIcon}
             size={16}
-            color={"black"}
+            color={props.prefixIconColor || ColorBaseEnum.black}
             style={{ marginRight: 4 }}
           />
         </View>
@@ -33,7 +33,11 @@ const TextInput = (props: TextInputPropsInterface) => {
       <RNTextInput
         ref={textRef}
         {...props}
-        style={{ height: 45, flex: 1 }}
+        placeholderTextColor={ColorBaseGrayEnum.gray500}
+        style={[
+          { height: 45, flex: 1, color: ColorBaseEnum.black },
+          props.textStyle,
+        ]}
         onFocus={() => {
           setIsFocus(true);
         }}

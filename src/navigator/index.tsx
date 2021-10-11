@@ -7,6 +7,7 @@ import {
   initialStateUserAuthReducer,
   userAuthReducer,
 } from "../reducer/userAuthReducer";
+import MutasiDetailScreen from "../screens/MutasiDetailScreen";
 
 import type { AuthStackInterface } from "./AuthenticationStack";
 import AuthStack from "./AuthenticationStack";
@@ -16,6 +17,7 @@ import BottomTabs from "./BottomTabs";
 export type BaseStackParamList = TabParamList & {
   AuthStack?: AuthStackInterface;
   HomeTab?: undefined;
+  MutasiDetail: undefined;
 };
 
 export type RootStackParamList = BaseStackParamList;
@@ -52,6 +54,7 @@ const Navigator = () => {
           }}
           children={() => <BottomTabs />}
         />
+        <RootStack.Screen name="MutasiDetail" component={MutasiDetailScreen} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

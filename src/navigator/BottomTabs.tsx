@@ -60,6 +60,7 @@ const customTabOptions: BottomTabNavigationOptions = {
     marginHorizontal: 10,
     bottom: 10,
   },
+  tabBarHideOnKeyboard: true,
 };
 
 const tabItem: Array<{

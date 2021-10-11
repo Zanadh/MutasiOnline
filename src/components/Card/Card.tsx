@@ -16,7 +16,7 @@ const Card: React.FC<CardPropsInterface> = ({ children, style }) => {
         {
           backgroundColor: ColorBaseEnum.white,
           elevation: 4,
-          borderRadius: 15,
+          borderRadius: 10,
           paddingHorizontal: 10,
           paddingVertical: 12,
           marginBottom: 8,

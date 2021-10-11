@@ -1,9 +1,10 @@
 import React from "react";
+import type { StyleProp, ViewStyle } from "react-native";
 import { View, StyleSheet, ImageBackground } from "react-native";
 
 import { ColorPrimaryEnum } from "../styles/Colors";
 
-function HeaderBackground() {
+function HeaderBackground({ style }: { style?: StyleProp<ViewStyle> }) {
   return (
     <View
       style={[
@@ -15,6 +16,7 @@ function HeaderBackground() {
           borderBottomRightRadius: 35,
           overflow: "hidden",
         },
+        style,
       ]}>
       <ImageBackground
         source={require("../assets/Images/landingBg1.jpg")}
