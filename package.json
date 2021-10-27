@@ -5,7 +5,7 @@
   "scripts": {
     "start": "react-native start",
     "start:clear": "watchman watch-del-all && yarn start --reset-cache",
-    "android": "react-native run-android",
+    "android": "ENVFILE=.env react-native run-android",
     "android:clean": "cd android && ./gradlew clean && cd ..",
     "ios": "react-native run-ios",
     "test": "jest",
@@ -21,15 +21,21 @@
     "appcenter": "^4.3.0",
     "appcenter-analytics": "^4.3.0",
     "appcenter-crashes": "^4.3.0",
+    "axios": "^0.24.0",
+    "formik": "^2.2.9",
     "react": "17.0.2",
     "react-native": "^0.65.0",
+    "react-native-config": "^1.4.5",
     "react-native-dropdown-picker": "^5.1.28",
+    "react-native-flash-message": "^0.2.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.8.0",
     "react-native-svg": "^12.1.1",
-    "react-native-svg-transformer": "^0.14.3"
+    "react-native-svg-transformer": "^0.14.3",
+    "yup": "^0.32.11",
+    "yup-phone": "^1.2.19"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

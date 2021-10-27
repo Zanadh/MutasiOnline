@@ -11,14 +11,12 @@ export enum ActionTypeEnum {
   "RESTORE_TOKEN" = "RESTORE_TOKEN",
   "SIGN_IN" = "SIGN_IN",
   "SIGN_OUT" = "SIGN_OUT",
-  "SIGN_OUT_ALL" = "SIGN_OUT_ALL",
 }
 
 interface Action {
   type: ActionTypeEnum;
   userToken: string | null;
   userRefreshToken: string | null;
-  deviceToken: string | null;
 }
 
 export const initialStateUserAuthReducer: State = {
@@ -43,20 +41,9 @@ export const userAuthReducer = (prevState: State, action: Action) => {
         isSignout: false,
         userToken: action.userToken,
         userRefreshToken: action.userRefreshToken,
-        deviceToken: action.deviceToken,
       };
     case "SIGN_OUT": {
       removeUserAuth();
-      return {
-        ...prevState,
-        isSignout: true,
-        userToken: null,
-        userRefreshToken: null,
-        deviceToken: null,
-      };
-    }
-    case "SIGN_OUT_ALL": {
-      removeAllUserAuth();
       return {
         ...prevState,
         isSignout: true,

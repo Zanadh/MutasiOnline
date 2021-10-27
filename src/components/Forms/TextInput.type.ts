@@ -2,16 +2,20 @@ import type {
   StyleProp,
   TextStyle,
   NativeSyntheticEvent,
-  TextInputChangeEventData,
+  TextInputFocusEventData,
+  KeyboardTypeOptions,
 } from "react-native";
 
 export interface TextInputPropsInterface {
   placeholder?: string;
   value?: string;
   style?: StyleProp<TextStyle>;
-  onChange?: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;
+  onChangeText?: (value: string) => void;
+  handleBlur?: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  keyboardType?: KeyboardTypeOptions;
   prefixIcon?: string;
   prefixIconColor?: string;
   secureTextEntry?: boolean;
   textStyle?: StyleProp<TextStyle>;
+  errorMessage?: string;
 }

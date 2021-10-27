@@ -178,7 +178,7 @@ const ProgressListScreen = () => {
           flex: 1,
           paddingBottom: 200,
         }}>
-        {Array.from(Array(4)).map(() => {
+        {/* {Array.from(Array(4)).map(() => {
           return (
             <RequestItemCard
               ownerName="M. Rahman Muttaqin"
@@ -186,7 +186,7 @@ const ProgressListScreen = () => {
               paymentFee={150000}
             />
           );
-        })}
+        })} */}
         <View style={{ height: 60 }} />
       </ScrollView>
     </View>
