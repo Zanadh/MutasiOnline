@@ -17,6 +17,7 @@ function Button(props: ButtonPropsInterface) {
       <View
         style={[
           styles.primary,
+          props.style,
           props.disabled ? { backgroundColor: ColorBaseGrayEnum.gray400 } : {},
         ]}>
         {props.isLoading ? (

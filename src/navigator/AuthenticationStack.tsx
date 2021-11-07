@@ -13,7 +13,7 @@ export type AuthStackParamList = {
   Login: undefined;
   Register: undefined;
   Landing: undefined;
-  HomeTab: undefined;
+  TabNavigator: undefined;
 };
 
 export interface AuthStackInterface {

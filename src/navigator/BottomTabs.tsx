@@ -61,6 +61,7 @@ const customTabOptions: BottomTabNavigationOptions = {
     bottom: 10,
   },
   tabBarHideOnKeyboard: true,
+  tabBarVisible: true,
 };
 
 const tabItem: Array<{

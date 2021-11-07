@@ -11,7 +11,7 @@ import HeaderBackground from "../components/HeaderBackground";
 import type { BaseStackParamList } from "../navigator";
 import { ColorBaseEnum, ColorBaseGrayEnum } from "../styles/Colors";
 
-type ProgressListrScreenNavigationProp = StackNavigationProp<
+type ProgressListScreenNavigationProp = StackNavigationProp<
   BaseStackParamList,
   "Progress"
 >;
@@ -72,7 +72,7 @@ const RequestItemCard = ({
   ownerName: string;
   paymentFee?: number;
 }) => {
-  const navigation = useNavigation<ProgressListrScreenNavigationProp>();
+  const navigation = useNavigation<ProgressListScreenNavigationProp>();
   return (
     <TouchableOpacity onPress={() => navigation.navigate("MutasiDetail")}>
       <Card style={{ borderRadius: 5, marginHorizontal: 10, display: "flex" }}>

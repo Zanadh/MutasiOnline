@@ -12,7 +12,7 @@ export type RequestStatusType =
   | "waitingPickup"
   | "complete";
 
-const MutasiDetailScreen = () => {
+const MutationDetailScreen = () => {
   return (
     <BaseLayout
       style={{
@@ -32,7 +32,7 @@ const MutasiDetailScreen = () => {
   );
 };
 
-export default MutasiDetailScreen;
+export default MutationDetailScreen;
 
 const styles = StyleSheet.create({
   cardStyle: {

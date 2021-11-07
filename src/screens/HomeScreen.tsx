@@ -1,8 +1,9 @@
 import type { NavigationProp } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import type { ImageSourcePropType } from "react-native";
 import {
+  TouchableOpacity,
   Image,
   ImageBackground,
   Dimensions,
@@ -13,11 +14,25 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import Carousel from "react-native-snap-carousel";
 import LinearGradient from "react-native-linear-gradient";
+import BottomDrawer from "components/BottomDrawer/BottomDrawer";
+import type BottomSheet from "@gorhom/bottom-sheet";
+import type { TabParamList } from "navigator/BottomTabs";
+import Icon from "react-native-vector-icons/FontAwesome";
+import type { StackNavigationProp } from "@react-navigation/stack";
+import type { BaseStackParamList } from "navigator";
+import type {
+  MutationServiceType,
+  MutationType,
+  MutationTypeEnum,
+} from "interfaces/MutationInterface";
 
 import Avatar from "../components/Avatar";
 import HeaderBackground from "../components/HeaderBackground";
-import type { AuthStackParamList } from "../navigator/AuthenticationStack";
-import { ColorBaseEnum, ColorSemanticInfoEnum } from "../styles/Colors";
+import {
+  ColorBaseEnum,
+  ColorBaseGrayEnum,
+  ColorSemanticInfoEnum,
+} from "../styles/Colors";
 import { Card } from "../components/Card";
 
 const WIDTH = Dimensions.get("screen").width;
@@ -47,52 +62,43 @@ const slideContents: Array<slideInterface> = [
   },
 ];
 
-type requestType =
-  | "addressChange"
-  | "nameTransfer"
-  | "colorChange"
-  | "shapeChange"
-  | "numberPlateChange"
-  | "comingSoon";
-
 const cardItems: Array<{
-  requestType: requestType;
+  requestMutationType?: MutationType;
   title: string;
   desc: string;
   imgSource: ImageSourcePropType;
 }> = [
   {
-    requestType: "addressChange",
+    requestMutationType: "AddressChange",
     title: "Pindah Alamat",
     desc: "Mutasi Kendaraan untuk Pindah Alamat",
     imgSource: require("../assets/Images/map.png"),
   },
   {
-    requestType: "nameTransfer",
+    requestMutationType: "NameTransfer",
     title: "Balik Nama",
     desc: "Mutasi Kendaraan untuk Balik Nama",
     imgSource: require("../assets/Images/nameTransfer.png"),
   },
   {
-    requestType: "colorChange",
+    requestMutationType: "ColorChange",
     title: "Ganti Warna",
     desc: "Mutasi Kendaraan untuk Ganti Warna",
     imgSource: require("../assets/Images/colorChange.png"),
   },
   {
-    requestType: "shapeChange",
+    requestMutationType: "ShapeChange",
     title: "Rubah Bentuk",
     desc: "Mutasi Kendaraan untuk Rubah Bentuk",
     imgSource: require("../assets/Images/shapeChange.png"),
   },
   {
-    requestType: "numberPlateChange",
+    requestMutationType: "PlateNumberChange",
     title: "Nomor Polisi",
     desc: "Mutasi Kendaraan untuk Ganti Nomor Polisi",
     imgSource: require("../assets/Images/numberPlate.png"),
   },
   {
-    requestType: "comingSoon",
     title: "Layanan Lainnya",
     desc: "Akan Datang Layanan Terbaru dari DITLANTAS",
     imgSource: require("../assets/Images/coming.jpg"),
@@ -167,71 +173,199 @@ const HomeHeader = () => {
   );
 };
 
-type AuthStackNavigationProp = NavigationProp<AuthStackParamList, "Login">;
-const HomeScreen = () => {
-  const navigation = useNavigation<AuthStackNavigationProp>();
+interface MenuItemInterface {
+  title: string;
+  icon: {
+    name: string;
+    color: string;
+  };
+  onPress?: () => void;
+}
+interface MenuItemInterface {
+  type: MutationServiceType;
+  title: string;
+  icon: {
+    name: string;
+    color: string;
+  };
+}
+const menuItemsData: Array<MenuItemInterface> = [
+  {
+    type: "PERSONAL",
+    title: "Mutasi Kendaraan Perorangan",
+    icon: {
+      name: "user",
+      color: "blue",
+    },
+  },
+  {
+    type: "CORPORATE",
+    title: "Mutasi Kendaraan Badan Hukum",
+    icon: {
+      name: "user",
+      color: "blue",
+    },
+  },
+  {
+    type: "GOVERNMENT_INSTITUTION",
+    title: "Mutasi Kendaraan Instansi Pemerintah",
+    icon: {
+      name: "user",
+      color: "blue",
+    },
+  },
+];
+
+const MenuItem = (props: MenuItemInterface) => {
   return (
-    <ScrollView>
-      <HomeHeader />
-      <View style={styles.contentContainer}>
-        <Card>
-          <Text
-            style={{
-              color: ColorBaseEnum.black,
-              fontWeight: "700",
-              fontSize: 16,
-            }}>
-            Layanan Mutasi Online
-          </Text>
-          <Text style={{ fontSize: 13, marginTop: 4 }}>
-            Silahkan memilih salah satu layanan mutasi kendaraan online.
-          </Text>
-        </Card>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "space-around",
-          }}>
-          {cardItems.map(cardItem => {
-            return (
-              <Card
-                style={{
-                  width: WIDTH * 0.43,
-                  alignSelf: "center",
-                  marginBottom: 12,
-                }}>
-                <Image
-                  source={cardItem.imgSource}
-                  style={{ height: 80, width: "100%", marginVertical: 8 }}
-                  resizeMode="contain"
-                />
-                <Text
-                  style={{
-                    color: ColorBaseEnum.black,
-                    fontWeight: "700",
-                    fontSize: 16,
-                    textAlign: "center",
-                  }}>
-                  {cardItem.title}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    marginTop: 4,
-                    textAlign: "center",
-                    color: ColorSemanticInfoEnum.default,
-                  }}>
-                  {cardItem.desc}
-                </Text>
-              </Card>
-            );
-          })}
-        </View>
+    <TouchableOpacity
+      onPress={props.onPress}
+      style={{
+        flexDirection: "row",
+        display: "flex",
+        alignItems: "center",
+        paddingRight: 4,
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderColor: ColorBaseGrayEnum.gray300,
+      }}>
+      <View
+        style={{
+          width: 25,
+          height: 25,
+          backgroundColor: props.icon.color,
+          borderRadius: 5,
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+        <Icon name={props.icon.name} color="white" />
       </View>
-      <View style={{ height: 60 }} />
-    </ScrollView>
+      <View style={{ flex: 1, marginLeft: 10 }}>
+        <Text
+          style={{
+            color: ColorBaseGrayEnum.gray700,
+            fontSize: 15,
+            fontWeight: "400",
+          }}>
+          {props.title}
+        </Text>
+      </View>
+      <Icon name="chevron-right" color={ColorBaseGrayEnum.gray400} />
+    </TouchableOpacity>
+  );
+};
+
+const BottomDrawerContent = ({
+  onPressMenuItem,
+}: {
+  onPressMenuItem: (serviceType: MutationServiceType) => void;
+}) => {
+  return (
+    <View>
+      <Text style={[styles.titleText]}>Jenis Mutasi Kendaraan</Text>
+      <Text
+        style={[
+          styles.cardSubtitleText,
+          { textAlign: "left", marginBottom: 12 },
+        ]}>
+        Silahkan Pilih Jenis Mutasi
+      </Text>
+      {menuItemsData.map(item => (
+        <MenuItem {...item} onPress={() => onPressMenuItem(item.type)} />
+      ))}
+    </View>
+  );
+};
+
+type HomeNavigationProp = StackNavigationProp<BaseStackParamList, "Home">;
+
+const HomeScreen = () => {
+  const navigation = useNavigation<HomeNavigationProp>();
+  const sheetRef = useRef<BottomSheet>(null);
+
+  const [selectedMutation, setSelectedMutation] = useState<MutationType>();
+
+  const openDrawer = (mutationType: MutationType) => {
+    sheetRef.current?.expand();
+    setSelectedMutation(mutationType);
+  };
+
+  const navigateToCreateRequest = useCallback(
+    (serviceType: MutationServiceType) => {
+      sheetRef.current?.close();
+      if (selectedMutation) {
+        navigation.push("FormMutation", {
+          mutationServiceType: serviceType,
+          mutationType: selectedMutation,
+        });
+      }
+    },
+    [navigation, selectedMutation],
+  );
+
+  return (
+    <>
+      <ScrollView>
+        <HomeHeader />
+        <View style={styles.contentContainer}>
+          <Card>
+            <Text
+              style={{
+                color: ColorBaseEnum.black,
+                fontWeight: "700",
+                fontSize: 16,
+              }}>
+              Layanan Mutasi Online
+            </Text>
+            <Text style={{ fontSize: 13, marginTop: 4 }}>
+              Silahkan memilih salah satu layanan mutasi kendaraan online.
+            </Text>
+          </Card>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "space-around",
+            }}>
+            {cardItems.map(cardItem => {
+              return (
+                <Card
+                  onPress={() =>
+                    cardItem.requestMutationType &&
+                    openDrawer(cardItem.requestMutationType)
+                  }
+                  style={{
+                    width: WIDTH * 0.43,
+                    alignSelf: "center",
+                    marginBottom: 12,
+                  }}>
+                  <Image
+                    source={cardItem.imgSource}
+                    style={{ height: 80, width: "100%", marginVertical: 8 }}
+                    resizeMode="contain"
+                  />
+                  <Text
+                    style={{
+                      color: ColorBaseEnum.black,
+                      fontWeight: "700",
+                      fontSize: 16,
+                      textAlign: "center",
+                    }}>
+                    {cardItem.title}
+                  </Text>
+                  <Text style={styles.cardSubtitleText}>{cardItem.desc}</Text>
+                </Card>
+              );
+            })}
+          </View>
+        </View>
+        <View style={{ height: 60 }} />
+      </ScrollView>
+      <BottomDrawer {...{ sheetRef }}>
+        <BottomDrawerContent onPressMenuItem={navigateToCreateRequest} />
+      </BottomDrawer>
+    </>
   );
 };
 
@@ -264,9 +398,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   subTitleText: {
-    fontSize: 12,
+    fontSize: 13,
     color: ColorBaseEnum.black,
     marginTop: 16,
     textAlign: "center",
+  },
+  cardSubtitleText: {
+    fontSize: 13,
+    marginTop: 4,
+    textAlign: "center",
+    color: ColorSemanticInfoEnum.default,
   },
 });

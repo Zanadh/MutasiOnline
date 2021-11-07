@@ -3,13 +3,18 @@ import type { StackNavigationOptions } from "@react-navigation/stack";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native";
+import type {
+  MutationServiceType,
+  MutationType,
+} from "interfaces/MutationInterface";
+import FormMutationScreen from "screens/FormMutationRequestScreen";
 
 import {
   ActionTypeEnum,
   initialStateUserAuthReducer,
   userAuthReducer,
 } from "../reducer/userAuthReducer";
-import MutasiDetailScreen from "../screens/MutasiDetailScreen";
+import MutasiDetailScreen from "../screens/MutationDetailScreen";
 import {
   _retrieveLocalStorageItem,
   _storeLocalStorageItem,
@@ -26,12 +31,16 @@ import BottomTabs from "./BottomTabs";
 
 export type BaseStackParamList = TabParamList & {
   AuthStack?: AuthStackInterface;
-  HomeTab?: undefined;
+  TabNavigator?: undefined;
   MutasiDetail: undefined;
+  FormMutation: {
+    mutationServiceType: MutationServiceType;
+    mutationType: MutationType;
+  };
 };
 
 export type RootStackParamList = BaseStackParamList;
-const RootStack = createStackNavigator<RootStackParamList>();
+const RootStack = createStackNavigator<BaseStackParamList>();
 
 const ScreenDefaultOption: StackNavigationOptions = {
   headerShown: false,
@@ -136,7 +145,7 @@ const Navigator = () => {
           ) : (
             <>
               <RootStack.Screen
-                name="HomeTab"
+                name="TabNavigator"
                 options={{
                   headerShown: false,
                 }}
@@ -145,6 +154,11 @@ const Navigator = () => {
               <RootStack.Screen
                 name="MutasiDetail"
                 component={MutasiDetailScreen}
+              />
+              <RootStack.Screen
+                name="FormMutation"
+                component={FormMutationScreen}
+                options={{ headerShown: false }}
               />
             </>
           )}

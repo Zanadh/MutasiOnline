@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
+import { AuthContext } from "context/AuthContext";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 import { Card } from "../components/Card";
@@ -12,79 +13,24 @@ import { ColorBaseEnum, ColorBaseGrayEnum } from "../styles/Colors";
 
 type NotificationScreenNavigationProp = StackNavigationProp<
   BaseStackParamList,
-  "Progress"
+  "Settings"
 >;
 
 interface MenuItemInterface {
   title: string;
-  desc: string;
+  desc?: string;
   icon: {
     name: string;
     color: string;
   };
   suffixComponent: React.ReactNode;
+  onPress?: () => void;
 }
-
-const menuItemList: Array<MenuItemInterface> = [
-  {
-    title: "Account",
-    desc: "Pengaturan Akun Anda",
-    icon: {
-      name: "user",
-      color: "blue",
-    },
-    suffixComponent: <Icon name="chevron-right" />,
-  },
-  {
-    title: "Notification",
-    desc: "Pengaturan Pemberitahuan",
-    icon: {
-      name: "bell",
-      color: "red",
-    },
-    suffixComponent: <Icon name="toggle-off" />,
-  },
-  {
-    title: "Privacy Policy",
-    desc: "Pengaturan Kebijakan Pribadi",
-    icon: {
-      name: "key",
-      color: "green",
-    },
-    suffixComponent: <Icon name="chevron-right" />,
-  },
-  {
-    title: "Terms & Conditions",
-    desc: " Pengaturan Syarat dan Ketentuan",
-    icon: {
-      name: "file-alt",
-      color: "blue",
-    },
-    suffixComponent: <Icon name="chevron-right" />,
-  },
-  {
-    title: "Help & Support",
-    desc: "Pengaturan Bantuan & Dukungan",
-    icon: {
-      name: "headset",
-      color: "purple",
-    },
-    suffixComponent: <Icon name="chevron-right" />,
-  },
-  {
-    title: "About",
-    desc: "Tentang Aplikasi",
-    icon: {
-      name: "question-circle",
-      color: "purple",
-    },
-    suffixComponent: <Icon name="chevron-right" />,
-  },
-];
 
 const MenuItem = (props: MenuItemInterface) => {
   return (
-    <View
+    <TouchableOpacity
+      onPress={props.onPress}
       style={{
         flexDirection: "row",
         display: "flex",
@@ -106,20 +52,95 @@ const MenuItem = (props: MenuItemInterface) => {
         <Icon name={props.icon.name} color="white" />
       </View>
       <View style={{ flex: 1, marginLeft: 10 }}>
-        <Text style={{ color: ColorBaseGrayEnum.gray700, fontSize: 13 }}>
+        <Text
+          style={{
+            color: ColorBaseGrayEnum.gray700,
+            fontSize: 16,
+            fontWeight: "500",
+          }}>
           {props.title}
         </Text>
-        <Text style={{ color: ColorBaseGrayEnum.gray600, fontSize: 10 }}>
-          {props.desc}
-        </Text>
+        {!!props.desc && (
+          <Text style={{ color: ColorBaseGrayEnum.gray600, fontSize: 13 }}>
+            {props.desc}
+          </Text>
+        )}
       </View>
       {props.suffixComponent}
-    </View>
+    </TouchableOpacity>
   );
 };
 
 const SettingScreen = () => {
   const navigation = useNavigation<NotificationScreenNavigationProp>();
+  const { signOut } = React.useContext(AuthContext);
+
+  const menuItemList: Array<MenuItemInterface> = [
+    {
+      title: "Account",
+      desc: "Pengaturan Akun Anda",
+      icon: {
+        name: "user",
+        color: "blue",
+      },
+      suffixComponent: <Icon name="chevron-right" />,
+    },
+    {
+      title: "Notification",
+      desc: "Pengaturan Pemberitahuan",
+      icon: {
+        name: "bell",
+        color: "red",
+      },
+      suffixComponent: <Icon name="toggle-off" />,
+    },
+    {
+      title: "Privacy Policy",
+      desc: "Pengaturan Kebijakan Pribadi",
+      icon: {
+        name: "key",
+        color: "green",
+      },
+      suffixComponent: <Icon name="chevron-right" />,
+    },
+    {
+      title: "Terms & Conditions",
+      desc: " Pengaturan Syarat dan Ketentuan",
+      icon: {
+        name: "file-alt",
+        color: "blue",
+      },
+      suffixComponent: <Icon name="chevron-right" />,
+    },
+    {
+      title: "Help & Support",
+      desc: "Pengaturan Bantuan & Dukungan",
+      icon: {
+        name: "headset",
+        color: "purple",
+      },
+      suffixComponent: <Icon name="chevron-right" />,
+    },
+    {
+      title: "About",
+      desc: "Tentang Aplikasi",
+      icon: {
+        name: "question-circle",
+        color: "purple",
+      },
+      suffixComponent: <Icon name="chevron-right" />,
+    },
+    {
+      title: "Sign Out",
+      icon: {
+        name: "sign-out-alt",
+        color: "red",
+      },
+      suffixComponent: <Icon name="chevron-right" />,
+      onPress: signOut,
+    },
+  ];
+
   return (
     <BaseLayout style={{ paddingHorizontal: 0, paddingTop: 0 }}>
       <HeaderBackground style={{ height: 100 }} />

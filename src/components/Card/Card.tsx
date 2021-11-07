@@ -1,17 +1,20 @@
 import React from "react";
-import type { StyleProp, ViewProps, ViewStyle } from "react-native";
-import { View } from "react-native";
+import type { StyleProp, ViewStyle } from "react-native";
+import { TouchableOpacity, ViewProps, View } from "react-native";
 
 import { ColorBaseEnum } from "../../styles/Colors";
 
 interface CardPropsInterface {
   style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
+  onPress?: () => void;
 }
 
-const Card: React.FC<CardPropsInterface> = ({ children, style }) => {
+const Card: React.FC<CardPropsInterface> = ({ children, style, onPress }) => {
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={1}
       style={[
         {
           backgroundColor: ColorBaseEnum.white,
@@ -24,7 +27,7 @@ const Card: React.FC<CardPropsInterface> = ({ children, style }) => {
         style,
       ]}>
       {children}
-    </View>
+    </TouchableOpacity>
   );
 };
 
