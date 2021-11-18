@@ -1,6 +1,7 @@
-import React, { memo, useMemo } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import type { FC } from "react";
 import BottomSheet, {
+  BottomSheetBackdrop,
   BottomSheetView,
   useBottomSheetDynamicSnapPoints,
 } from "@gorhom/bottom-sheet";
@@ -8,6 +9,7 @@ import { StyleSheet } from "react-native";
 import { ColorBaseGrayEnum } from "styles/Colors";
 
 import type { BottomDrawerProps } from "./BottomDrawer.type";
+import DrawerBackdrop from "./DrawerBackdrop";
 
 const BottomDrawer: FC<BottomDrawerProps> = props => {
   const initialSnapPoints = useMemo(
@@ -21,16 +23,29 @@ const BottomDrawer: FC<BottomDrawerProps> = props => {
     handleContentLayout,
   } = useBottomSheetDynamicSnapPoints(initialSnapPoints);
 
+  const renderBackdrop = useCallback(
+    backdropProps => (
+      <BottomSheetBackdrop
+        {...backdropProps}
+        disappearsOnIndex={-1}
+        appearsOnIndex={1}
+      />
+    ),
+    [],
+  );
+
   return (
     <BottomSheet
       ref={props.sheetRef}
       snapPoints={animatedSnapPoints}
       handleHeight={animatedHandleHeight}
       contentHeight={animatedContentHeight}
+      backdropComponent={renderBackdrop}
+      onClose={props.onClose}
       detached
       index={-1}
       enablePanDownToClose
-      bottomInset={65}
+      bottomInset={props.bottomInset || 20}
       style={[styles.bottomSheet, props.bottomSheetStyle]}>
       <BottomSheetView
         onLayout={handleContentLayout}

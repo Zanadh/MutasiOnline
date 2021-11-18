@@ -1,9 +1,8 @@
-import type { NavigationProp } from "@react-navigation/native";
-import { useNavigation } from "@react-navigation/native";
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, { useCallback, useRef, useState } from "react";
 import type { ImageSourcePropType } from "react-native";
 import {
-  TouchableOpacity,
+  BackHandler,
   Image,
   ImageBackground,
   Dimensions,
@@ -16,23 +15,18 @@ import Carousel from "react-native-snap-carousel";
 import LinearGradient from "react-native-linear-gradient";
 import BottomDrawer from "components/BottomDrawer/BottomDrawer";
 import type BottomSheet from "@gorhom/bottom-sheet";
-import type { TabParamList } from "navigator/BottomTabs";
-import Icon from "react-native-vector-icons/FontAwesome";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import type { BaseStackParamList } from "navigator";
 import type {
   MutationServiceType,
   MutationType,
-  MutationTypeEnum,
 } from "interfaces/MutationInterface";
+import MenuItem from "components/MenuItem";
+import { showFlashMessage } from "utils/showFlashMessage";
 
 import Avatar from "../components/Avatar";
 import HeaderBackground from "../components/HeaderBackground";
-import {
-  ColorBaseEnum,
-  ColorBaseGrayEnum,
-  ColorSemanticInfoEnum,
-} from "../styles/Colors";
+import { ColorBaseEnum, ColorSemanticInfoEnum } from "../styles/Colors";
 import { Card } from "../components/Card";
 
 const WIDTH = Dimensions.get("screen").width;
@@ -174,14 +168,6 @@ const HomeHeader = () => {
 };
 
 interface MenuItemInterface {
-  title: string;
-  icon: {
-    name: string;
-    color: string;
-  };
-  onPress?: () => void;
-}
-interface MenuItemInterface {
   type: MutationServiceType;
   title: string;
   icon: {
@@ -216,45 +202,6 @@ const menuItemsData: Array<MenuItemInterface> = [
   },
 ];
 
-const MenuItem = (props: MenuItemInterface) => {
-  return (
-    <TouchableOpacity
-      onPress={props.onPress}
-      style={{
-        flexDirection: "row",
-        display: "flex",
-        alignItems: "center",
-        paddingRight: 4,
-        paddingVertical: 12,
-        borderBottomWidth: 1,
-        borderColor: ColorBaseGrayEnum.gray300,
-      }}>
-      <View
-        style={{
-          width: 25,
-          height: 25,
-          backgroundColor: props.icon.color,
-          borderRadius: 5,
-          alignItems: "center",
-          justifyContent: "center",
-        }}>
-        <Icon name={props.icon.name} color="white" />
-      </View>
-      <View style={{ flex: 1, marginLeft: 10 }}>
-        <Text
-          style={{
-            color: ColorBaseGrayEnum.gray700,
-            fontSize: 15,
-            fontWeight: "400",
-          }}>
-          {props.title}
-        </Text>
-      </View>
-      <Icon name="chevron-right" color={ColorBaseGrayEnum.gray400} />
-    </TouchableOpacity>
-  );
-};
-
 const BottomDrawerContent = ({
   onPressMenuItem,
 }: {
@@ -279,14 +226,47 @@ const BottomDrawerContent = ({
 
 type HomeNavigationProp = StackNavigationProp<BaseStackParamList, "Home">;
 
+let backCount = 0;
+
 const HomeScreen = () => {
   const navigation = useNavigation<HomeNavigationProp>();
   const sheetRef = useRef<BottomSheet>(null);
-
   const [selectedMutation, setSelectedMutation] = useState<MutationType>();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const backPressHandler = () => {
+    if (backCount < 1) {
+      backCount += 1;
+      showFlashMessage({ type: "info", message: "Press again to close" });
+    }
+    setTimeout(() => {
+      backCount = 0;
+    }, 2000);
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        if (isDrawerOpen) {
+          sheetRef.current?.close();
+          return true;
+        }
+        if (backCount === 1) return false;
+
+        backPressHandler();
+        return true;
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [isDrawerOpen]),
+  );
 
   const openDrawer = (mutationType: MutationType) => {
     sheetRef.current?.expand();
+    setIsDrawerOpen(true);
     setSelectedMutation(mutationType);
   };
 
@@ -362,7 +342,10 @@ const HomeScreen = () => {
         </View>
         <View style={{ height: 60 }} />
       </ScrollView>
-      <BottomDrawer {...{ sheetRef }}>
+      <BottomDrawer
+        {...{ sheetRef }}
+        onClose={() => setIsDrawerOpen(false)}
+        bottomInset={75}>
         <BottomDrawerContent onPressMenuItem={navigateToCreateRequest} />
       </BottomDrawer>
     </>

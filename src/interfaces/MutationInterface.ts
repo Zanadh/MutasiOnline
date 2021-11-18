@@ -31,3 +31,21 @@ export enum MutationServiceTypeEnum {
   corporate = "CORPORATE",
   governmemtInstitution = "GORVERNMENT_INSTITUTION",
 }
+
+export type DataMutationType = SamsatType | DataImageType;
+
+export type DataImageType =
+  | "KTP"
+  | "BPKB"
+  | "STNK"
+  | "powerOfAttorney"
+  | "NPWP"
+  | "certificateOfDomicile"
+  | "businessTradeLicence"
+  | "deedOfAddressChange"
+  | "frontSideVehicle"
+  | "leftSideVehicle"
+  | "rightSideVehicle"
+  | "rearSideVehicle";
+
+export type SamsatType = "samsatSource" | "samsatTarget" | "samsatCheck";

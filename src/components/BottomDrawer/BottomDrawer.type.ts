@@ -22,5 +22,7 @@ export interface BottomDrawerProps {
     >
   >;
   snapPoints?: Array<string | number>;
+  onClose?: () => void;
   isScrollable?: boolean;
+  bottomInset?: number;
 }

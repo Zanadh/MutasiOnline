@@ -6,8 +6,10 @@ import { ActivityIndicator } from "react-native";
 import type {
   MutationServiceType,
   MutationType,
+  SamsatType,
 } from "interfaces/MutationInterface";
 import FormMutationScreen from "screens/FormMutationRequestScreen";
+import SamsatListScreen from "screens/ListSamsatScreen";
 
 import {
   ActionTypeEnum,
@@ -37,6 +39,17 @@ export type BaseStackParamList = TabParamList & {
     mutationServiceType: MutationServiceType;
     mutationType: MutationType;
   };
+  SamsatList: {
+    onSelectCB: (value: string) => void;
+    selectedSamsat?: string;
+    samsatType?: SamsatType;
+  };
+};
+
+const listSamsatScreenTitle: Record<SamsatType, string> = {
+  samsatSource: "Pilih Samsat Asal",
+  samsatTarget: "Pilih Samsat Tujuan",
+  samsatCheck: "Pilih Samsat untuk Cek Fisik",
 };
 
 export type RootStackParamList = BaseStackParamList;
@@ -159,6 +172,16 @@ const Navigator = () => {
                 name="FormMutation"
                 component={FormMutationScreen}
                 options={{ headerShown: false }}
+              />
+              <RootStack.Screen
+                name="SamsatList"
+                component={SamsatListScreen}
+                options={({ route }) => ({
+                  title:
+                    (!!route.params.samsatType &&
+                      listSamsatScreenTitle[route.params.samsatType]) ||
+                    "List Samsat",
+                })}
               />
             </>
           )}
